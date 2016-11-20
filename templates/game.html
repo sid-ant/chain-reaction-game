@@ -1,0 +1,68 @@
+$def with (input=None)
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table,td {
+    border: 1px solid black;
+}
+</style>
+</head>
+<body onload="startGame()">
+
+
+<center> <table id="myTable"> </table> <center>
+
+<form action="/game" method="post" id="point">
+
+
+<p id="formelement">   </p>
+</form>
+
+$if input:
+  <script>
+    console.log($input);
+    var input=$input;
+    console.log(input);
+  </script>
+$else:
+  <script>
+    var input=[[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
+  </script>
+
+<script>
+
+function startGame(){
+  myGame.myFunction();
+}
+
+var myGame = {
+      myFunction :function() {
+      var row=[];;
+      var cell=[];
+      var table = document.getElementById("myTable");
+      for (i=0;i<5;i++){
+        row[i] = table.insertRow(i);
+          for (j=0;j<5;j++) {
+              cell[i]=[];
+              cell[i][j]=row[i].insertCell(j);
+              var content = "<p onclick='amazing("+i+","+j+")'>" + String(input[i][j]) + " </p>";
+              cell[i][j].innerHTML=content;
+          }
+        }
+  }
+};
+
+function amazing(x,y){
+      var formElementData = "<input type='hidden' name='position' value='"+x+","+y+"''>";
+      var formElement = document.getElementById("formelement");
+      formElement.innerHTML=formElementData;
+      document.getElementById("point").submit();
+}
+
+</script>
+
+
+</body>
+</html>
