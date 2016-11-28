@@ -1,4 +1,4 @@
-$def with (input=None)
+$def with (input=None,player=None)
 
 <!DOCTYPE html>
 <html>
@@ -14,11 +14,11 @@ table,td {
 
 <center> <table id="myTable"> </table> <center>
 
-<form action="/game" method="post" id="point">
-
-
+<form action="/" method="post" id="point">
 <p id="formelement">   </p>
+<p id="player">   </p>
 </form>
+<p id="clickE"> </p>
 
 $if input:
   <script>
@@ -26,12 +26,21 @@ $if input:
     var input=$input;
     console.log(input);
   </script>
-$else:
+
+$if player:
   <script>
-    var input=[[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
+  var player=$player;
   </script>
 
+
 <script>
+
+// function callAI() {
+//   var formElementData = "<input type='hidden' name='AI' value='1'>";
+//   var formElement = document.getElementById("formelement");
+//   formElement.innerHTML=formElementData;
+//   document.getElementById("point").submit();
+// }
 
 function startGame(){
   myGame.myFunction();
@@ -47,17 +56,20 @@ var myGame = {
           for (j=0;j<5;j++) {
               cell[i]=[];
               cell[i][j]=row[i].insertCell(j);
-              var content = "<p onclick='amazing("+i+","+j+")'>" + String(input[i][j]) + " </p>";
+              var content = "<p onclick='userMove("+i+","+j+")'>" + String(input[i][j]) + " </p>";
               cell[i][j].innerHTML=content;
           }
         }
   }
 };
 
-function amazing(x,y){
+function userMove(x,y){
       var formElementData = "<input type='hidden' name='position' value='"+x+","+y+"''>";
+      var formPlayerInfo = "<input type='hidden' name='playerid' value='"+player+"''>";
       var formElement = document.getElementById("formelement");
+      var playerInfo = document.getElementById("player");
       formElement.innerHTML=formElementData;
+      playerInfo.innerHTML=formPlayerInfo;
       document.getElementById("point").submit();
 }
 

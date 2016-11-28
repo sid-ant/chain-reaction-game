@@ -1,51 +1,43 @@
 import web
+import logic
 
 urls = (
-  '/', 'index','/hello','wow','/form','handle','/game','game'
+  '/','game'
   )
 
 # what does this do and how does it do it?
 app = web.application(urls, globals())
 render = web.template.render('templates/')
-grid=[[00,00,00,00,00],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
+
+grid=[[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
+player_id=1
 
 class game:
     def GET(self):
-        #input=[[01,20,30,40,0],[0,0,0,03,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
-        return render.game()
+        gird=[[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
+        return render.game(input=grid,player=player_id)
     def POST(self):
-        orbClicked = web.input(position=None)
+        global grid
+        orbClicked = web.input(position=None,playerid=None)
         orb=orbClicked.position
+        pID=orbClicked.playerid
         coOrdinates = orb.split(',')
         for i in range(len(coOrdinates)):
             coOrdinates[i]=int(coOrdinates[i])
         x=coOrdinates[0]
         y=coOrdinates[1]
-        grid[x][y]=01
-        return render.game(input=grid)
+        # need to add server side check to ensure user clicked on their node only
 
-class index:
-    def GET(self):
-        #whatever the form supplies via get in field name
-        form = web.input(name=None,travel=None)
-        greeting = "Hello  "+str(form.name) + str(form.travel)
-        return render.index(greeting=greeting)
-        # return render.index()
+        #player_id = player_id.split(',')
+        player_id = int(pID)
+        grid=logic.move(x,y,player_id,grid)
+        if player_id==1:
+            player_id=2
+        else:
+            player_id=1
+        # x and y are input co-ordinates for the z to work on
+        return render.game(input=grid,player=player_id)
 
-class wow:
-    def GET(self):
-        # msg = "nice to meet you"
-        # return msg
-        return render.duck("wow")
-
-class handle:
-    def GET(self):
-        return render.hello_form()
-    def POST(self):
-        form = web.input(name=None,greet=None)
-        #greeting = "%s, %s" % (form.greet, form.name)
-        msg = "Hello %s and  %s " %(form.name,form.greet)
-        return render.index(greeting=msg)
 
 # still doesn't know what this does? duh?
 if __name__ == "__main__":
