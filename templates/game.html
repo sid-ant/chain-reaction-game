@@ -12,13 +12,15 @@ table,td {
 <body onload="startGame()">
 
 
-<center> <table id="myTable"> </table> <center>
+<center> 
+<p id="clickE"> </p>
+<table id="myTable"> </table> <center>
 
 <form action="/" method="post" id="point">
 <p id="formelement">   </p>
 <p id="player">   </p>
 </form>
-<p id="clickE"> </p>
+
 
 $if input:
   <script>
@@ -30,7 +32,11 @@ $if input:
 $if player:
   <script>
   var player=$player;
+  var turn = document.getElementById("clickE");
+  turn.innerHTML="Player's "+player+" turn";
+
   </script>
+
 
 
 <script>
@@ -64,6 +70,12 @@ var myGame = {
 };
 
 function userMove(x,y){
+      console.log("hey "+typeof(player));
+      console.log(parseInt(input[x][y]/10));
+      if (parseInt(input[x][y]/10)!=player){
+        window.alert("Not Your Orb Dude! You are player "+player);
+        return;
+      }
       var formElementData = "<input type='hidden' name='position' value='"+x+","+y+"''>";
       var formPlayerInfo = "<input type='hidden' name='playerid' value='"+player+"''>";
       var formElement = document.getElementById("formelement");
