@@ -23,6 +23,9 @@ def move(x,y,player,inputGrid):
     global volatile_orbs,my_volatile,my_orbs
     grid=inputGrid
     player_id=player
+    my_orbs=[]
+    my_volatile=[]
+    volatile_orbs=[]
     for i in range(size):
         for j in range(size):
             if grid[i][j] / 10 == player_id:
@@ -32,6 +35,11 @@ def move(x,y,player,inputGrid):
             if grid[i][j] % 10 == surrounding(i, j) - 1 and grid[i][j] / 10 == player_id:
                 my_volatile.append([i, j])
 
+    print ":::::::OUTPUT:::::"
+    print "My Volatile is: ",my_volatile
+    print "Grid is:",grid
+    print "Volatile is",volatile_orbs
+    print "::::::END:::::::::"
     if [x,y] in my_volatile:
         result(x,y)
     else:
@@ -45,6 +53,7 @@ def move(x,y,player,inputGrid):
 def result(i,j):
     global grid
     global volatile_orbs
+
     sourceNode = [i, j]
     grid[i][j]=0
     sourceNodeIndex = volatile_orbs.index(sourceNode)
