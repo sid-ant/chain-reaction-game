@@ -35,11 +35,11 @@ def move(x,y,player,inputGrid):
             if grid[i][j] % 10 == surrounding(i, j) - 1 and grid[i][j] / 10 == player_id:
                 my_volatile.append([i, j])
 
-    print ":::::::OUTPUT:::::"
-    print "My Volatile is: ",my_volatile
-    print "Grid is:",grid
-    print "Volatile is",volatile_orbs
-    print "::::::END:::::::::"
+    # print ":::::::OUTPUT:::::"
+    # print "My Volatile is: ",my_volatile
+    # print "Grid is:",grid
+    # print "Volatile is",volatile_orbs
+    # print "::::::END:::::::::"
     if [x,y] in my_volatile:
         result(x,y)
     else:

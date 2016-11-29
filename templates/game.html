@@ -1,4 +1,4 @@
-$def with (input=None,player=None)
+$def with (input=None,player=None,winner=None)
 
 <!DOCTYPE html>
 <html>
@@ -21,6 +21,15 @@ table,td {
 <p id="player">   </p>
 </form>
 
+<script>
+  var win=0;
+</script>
+
+$if winner!=0:
+  <script>
+    var win=$winner;
+    window.alert("Player "+win+" WON!");
+  </script>
 
 $if input:
   <script>
@@ -34,7 +43,6 @@ $if player:
   var player=$player;
   var turn = document.getElementById("clickE");
   turn.innerHTML="Player's "+player+" turn";
-
   </script>
 
 
@@ -72,6 +80,10 @@ var myGame = {
 function userMove(x,y){
       console.log("hey "+typeof(player));
       console.log(parseInt(input[x][y]/10));
+      if (win!=0){
+          window.alert("Player "+win+" WON! Dude");
+          return;
+      }
       if (input[x][y]!=0) {
         if (parseInt(input[x][y]/10)!=player) {
           window.alert("Not Your Orb Dude! You are player "+player);
