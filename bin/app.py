@@ -1,9 +1,10 @@
 import web
 import logic
 import copy
+import os
 
 urls = (
-  '/','game'
+  '/','game','/home','home','/images/(.*)','images'
   )
 
 # what does this do and how does it do it?
@@ -13,6 +14,10 @@ render = web.template.render('templates/')
 grid=[[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
 player_id=1
 old=[]
+
+class home:
+    def GET(self):
+        return render.home();
 
 class game:
     def GET(self):
@@ -72,6 +77,22 @@ class game:
         print ":::::::FINISH:::::::"
         return render.game(input=grid,player=player_id,winner=win)
 
+class images:
+    def GET(self,name):
+        ext = name.split(".")[-1] # Gather extension
+
+        cType = {
+            "png":"images/png",
+            "jpg":"images/jpeg",
+            "gif":"images/gif",
+            "ico":"images/x-icon"            }
+
+        if name in os.listdir('images'):  # Security
+            print "hello world"
+            web.header("Content-Type", cType[ext]) # Set the Header
+            return open('images/%s'%name,"rb").read() # Notice 'rb' for reading images
+        else:
+            raise web.notfound()
 
 # still doesn't know what this does? duh?
 if __name__ == "__main__":
