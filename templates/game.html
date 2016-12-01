@@ -5,14 +5,20 @@ $def with (input=None,player=None,winner=None)
 <head>
 <style>
 table,td {
+  /*border-collapse: collapse;*/
     border: 1px solid black;
+
+}
+td{
+  height:60px; width:70px;
 }
 </style>
 </head>
 <body onload="startGame()">
 
-
+<font color="white">
 <p id="clickE"> </p>
+</font>
 <table id="myTable"> </table>
 
 <form action="/" method="post" id="point">
@@ -69,12 +75,41 @@ var myGame = {
           for (j=0;j<5;j++) {
               cell[i]=[];
               cell[i][j]=row[i].insertCell(j);
-              var content = "<p onclick='userMove("+i+","+j+")'>" + String(input[i][j]) + " </p>";
+              //var content = getOrbImage(i,j) + "onclick='userMove("+i+","+j+")'>";
+              //String(input[i][j])
+              var content = "<img " + getOrbImage(i,j) + " onclick='javascript:userMove("+i+","+j+")'>";
               cell[i][j].innerHTML=content;
           }
         }
   }
 };
+
+function getOrbImage(x,y){
+    var address="/static/images/orbs/"
+    var orbinfo = input[x][y];
+    console.log("orb is "+orbinfo);
+    var numberoforbs = parseInt(orbinfo%10);
+    var playerinformation = parseInt(orbinfo/10);
+    console.log("numberoforbs is "+numberoforbs);
+    console.log("player is "+playerinformation);
+
+      if(playerinformation==1) {
+        var image = "src="+address+"b"+numberoforbs+"s.png";
+        console.log(image);
+        return image;
+      }
+      else if(playerinformation==2){
+        var image = "src="+address+"r"+numberoforbs+"s.png";
+        console.log(image);
+        return image;
+      }
+      else{
+        var image = "src="+address+"blank3.png" + " height=59 width=69";
+        console.log(image);
+        return image;
+      }
+
+}
 
 function userMove(x,y){
       console.log("hey "+typeof(player));

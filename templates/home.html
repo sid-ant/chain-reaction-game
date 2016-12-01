@@ -4,6 +4,15 @@
 <title> Chain Reaction </title>
 </head>
 <body>
+<style>
+  body {
+      /*background-color: "#e74c3c";*/
+    background-image: url('/static/images/38.jpg');
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      background-position: center bottom;;
+  }
+</style>
 
 <script type="text/javascript">
 function autoResize(id){
@@ -16,14 +25,16 @@ function autoResize(id){
     }
 
     document.getElementById(id).height= (newheight) + "px";
-    //document.getElementById(id).width= (newwidth) + "px";
+    document.getElementById(id).width= (newwidth) + "px";
 }
 </script>
 
 <center>
-    <img style="-webkit-user-select: none" src="http://localhost:8080/static/images/title.gif">
+    <img style="-webkit-user-select: none" src="http://localhost:8080/static/images/title4.gif">
 	<p> </p>
-	<iframe src="http://localhost:8080/"  height="200px" id="iframe1" marginheight="0" frameborder="1" onLoad="autoResize('iframe1');"></iframe>
+	<!-- <iframe src="http://localhost:8080/"  width="400px" height="350px" id="iframe1" marginheight="0" frameborder="1" onLoad="autoResize('iframe1');"></iframe> -->
+  <iframe src="http://localhost:8080/"  width="400px" height="440px" id="iframe1" marginheight="0" frameborder="0"></iframe>
+
 </center>
 </body>
 </html>
