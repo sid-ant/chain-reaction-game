@@ -4,7 +4,7 @@ import copy
 import os
 
 urls = (
-  '/','game','/home','home','/images/(.*)','images'
+  '/','game','/home','home'
   )
 
 # what does this do and how does it do it?
@@ -76,23 +76,6 @@ class game:
         print "WINNER IS",win
         print ":::::::FINISH:::::::"
         return render.game(input=grid,player=player_id,winner=win)
-
-class images:
-    def GET(self,name):
-        ext = name.split(".")[-1] # Gather extension
-
-        cType = {
-            "png":"images/png",
-            "jpg":"images/jpeg",
-            "gif":"images/gif",
-            "ico":"images/x-icon"            }
-
-        if name in os.listdir('images'):  # Security
-            print "hello world"
-            web.header("Content-Type", cType[ext]) # Set the Header
-            return open('images/%s'%name,"rb").read() # Notice 'rb' for reading images
-        else:
-            raise web.notfound()
 
 # still doesn't know what this does? duh?
 if __name__ == "__main__":
