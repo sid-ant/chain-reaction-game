@@ -22,14 +22,20 @@ class home:
 
 class menu:
     def GET(self):
+        global grid
+        global player_id
+        quit=web.input()
+        if quit.clear is not None:
+            print "sexy"
+            grid=[[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
+            player_id=1
         return render.menu()
+
 
 class getname:
     def GET(self):
-        print "hello world"
         ty = web.input()
-        print "here I am"
-        print ty.type
+        # determining if its is pvp or pvc
         players = int(ty.type)
         return render.playername(type=players)
     def POST(self):
@@ -38,8 +44,8 @@ class getname:
 
 class game:
     def GET(self):
-        # this gets called when the first time page is loaded
-        gird=[[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
+        # this gets called when the first time page is loaded or when the page is refresed
+        grid=[[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
         return render.game(input=grid,player=player_id,winner=0)
 
     def POST(self):
