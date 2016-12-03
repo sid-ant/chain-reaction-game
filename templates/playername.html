@@ -1,0 +1,56 @@
+$def with (type=None)
+<!DOCTYPE HTML>
+<html>
+<head>
+</head>
+<body>
+$if type==1:
+  <script>
+      var ty=1;
+  </script>
+
+$if type==2:
+  <script>
+      var ty=2;
+  </script>
+
+
+
+<center>
+    <form id="hello" action="/name" method="post">
+      <p id="title1"> </p>
+      <p id="p1">   </p>
+      <p id="title2"> </p>
+      <p id="p2">   </p>
+      <p id="match"> </p>
+      <br> 
+      <button type="submit" style="border: 0; background: transparent">
+        <img src="/static/images/submit.PNG" width='136' height='44'  alt="submit" />
+      </button>
+    </form>
+</center>
+
+    <script>
+    var p1 = document.getElementById("p1");
+    var p2 = document.getElementById("p2");
+    var t1 = document.getElementById("title1");
+    var t2 = document.getElementById("title2");
+    var match = document.getElementById("match");
+    match.innerHTML="<input type='hidden' name='match' value="+ty+">";
+     if (ty==1){
+       t1.innerHTML="<img src='/static/images/p1.gif'> </img>";
+       var content= "<input type='text' name='player1' value='max' maxlength='10'> </input>";
+       t2.innerHTML="<img src='/static/images/p2.gif'> </img>";
+       var content2= "<input type='text' name='player2' value='sid' maxlength='10'></input>";
+       p1.innerHTML=content;
+       p2.innerHTML=content2;
+     }
+     else if(ty==2){
+       t1.innerHTML="<img src='/static/images/pn.gif'> </img>";
+       var content= "<input type='text' name='player1' value='sid' maxlength='10'> </input>";
+       p1.innerHTML=content;
+     }
+    </script>
+
+</body>
+</html>
