@@ -7,7 +7,6 @@ $def with (input=None,player=None,winner=None)
 table,td {
   /*border-collapse: collapse;*/
     border: 1px solid black;
-
 }
 td{
   height:60px; width:70px;
@@ -17,6 +16,7 @@ td{
 <body onload="startGame()">
 
 <font color="white">
+<!-- to display player number -->
 <p id="clickE"> </p>
 </font>
 <table id="myTable"> </table>
@@ -54,20 +54,13 @@ $if player:
 
 <script>
 
-// function callAI() {
-//   var formElementData = "<input type='hidden' name='AI' value='1'>";
-//   var formElement = document.getElementById("formelement");
-//   formElement.innerHTML=formElementData;
-//   document.getElementById("point").submit();
-// }
-
 function startGame(){
   myGame.myFunction();
 }
 
 var myGame = {
       myFunction :function() {
-      var row=[];;
+      var row=[];
       var cell=[];
       var table = document.getElementById("myTable");
       for (i=0;i<5;i++){
@@ -75,14 +68,29 @@ var myGame = {
           for (j=0;j<5;j++) {
               cell[i]=[];
               cell[i][j]=row[i].insertCell(j);
-              //var content = getOrbImage(i,j) + "onclick='userMove("+i+","+j+")'>";
-              //String(input[i][j])
               var content = "<img " + getOrbImage(i,j) + " onclick='javascript:userMove("+i+","+j+")'>";
               cell[i][j].innerHTML=content;
           }
         }
   }
 };
+
+function surrounding(i,j){
+   var count=4
+   var right = [i, j + 1]
+   var left = [i, j - 1]
+   var bottom = [i - 1, j]
+   var top = [i + 1, j]
+   var directions = [right, left, bottom, top]
+
+   for (l=0;l<4;l++){
+     if(directions[l].indexOf(-1)!= -1 || directions[l].indexOf(5)!= -1){
+       count-=1;
+     }
+   }
+   return count;
+
+}
 
 function getOrbImage(x,y){
     var address="/static/images/orbs/"
@@ -94,12 +102,22 @@ function getOrbImage(x,y){
     console.log("player is "+playerinformation);
 
       if(playerinformation==1) {
-        var image = "src="+address+"b"+numberoforbs+"s.png";
+          if (numberoforbs == surrounding(x,y)-1){
+              var image = "src="+address+"b"+numberoforbs+"x.gif";
+          }
+          else{
+            var image = "src="+address+"b"+numberoforbs+"s.png";
+          }
         console.log(image);
         return image;
       }
       else if(playerinformation==2){
-        var image = "src="+address+"r"+numberoforbs+"s.png";
+        if (numberoforbs == surrounding(x,y)-1){
+            var image = "src="+address+"r"+numberoforbs+"x.gif";
+        }
+        else {
+          var image = "src="+address+"r"+numberoforbs+"s.png";
+        }
         console.log(image);
         return image;
       }

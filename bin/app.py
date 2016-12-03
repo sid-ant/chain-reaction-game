@@ -21,11 +21,14 @@ class home:
 
 class game:
     def GET(self):
+        # this gets called when the first time page is loaded
         gird=[[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
         return render.game(input=grid,player=player_id,winner=0)
     def POST(self):
+        # this gets called for the subsequent times whenever an cell is clicked upon
         global grid
         global old
+        # here orbClicked gets the input about which cell was clicked
         orbClicked = web.input(position=None,playerid=None)
         orb=orbClicked.position
         pID=orbClicked.playerid
@@ -34,9 +37,10 @@ class game:
             coOrdinates[i]=int(coOrdinates[i])
         x=coOrdinates[0]
         y=coOrdinates[1]
+        # need this to determine winner
         old = copy.deepcopy(grid)
-        print ":::::::LOG:::::::"
-        print "OLD GRID IS: ",old
+        # print ":::::::LOG:::::::"
+        # print "OLD GRID IS: ",old
         # need to add server side check to ensure user clicked on their node only
 
         #player_id = player_id.split(',')
@@ -46,13 +50,13 @@ class game:
             player_id=2
         else:
             player_id=1
-        # x and y are input co-ordinates for the z to work on
+        # determining if someone won or not?
         old1=0
         old2=0
         new1=0
         new2=0
         win=0
-        print "OLD GRID IS: ",old
+        # print "OLD GRID IS: ",old
         for i in range(5):
             for j in range(5):
                 if old[i][j]/10==1:
@@ -68,13 +72,13 @@ class game:
             win=2
         elif old2!=0 and new2==0:
             win=1
-        print "OLD 1s",old1
-        print "New 1s",new1
-        print "OLD 2s",old2
-        print "New 2s",new2
-        print "NEW GRID is",grid
-        print "WINNER IS",win
-        print ":::::::FINISH:::::::"
+        # print "OLD 1s",old1
+        # print "New 1s",new1
+        # print "OLD 2s",old2
+        # print "New 2s",new2
+        # print "NEW GRID is",grid
+        # print "WINNER IS",win
+        # print ":::::::FINISH:::::::"
         return render.game(input=grid,player=player_id,winner=win)
 
 # still doesn't know what this does? duh?
