@@ -13,6 +13,7 @@ my_volatile = []
 opponent_volatile = []
 empty_spaces = []
 nextVolatileOrbs = []
+nextMoveGrid=[]
 
 
 def bestMove():
@@ -51,8 +52,8 @@ def bestMove():
         myOrbs = 0
         emptySpaces = 0
 
-    print myOutcomes[0][2]
-    print len(opponent_orbs)
+    #print myOutcomes[0][2]
+    #print len(opponent_orbs)
     # keep only the outcomes where I am capturing orbs
     for blah in range(len(myOutcomes)):
         uncertanity = 0
@@ -66,7 +67,7 @@ def bestMove():
 
     # check if I captured any orbs
     if len(myOutcomes) > 0:
-        print "have something to kill"
+        #print "have something to kill"
         myMove = maximumSecureKills(myOutcomes)
         # secure kills: I don't die in next move and I don't lose more in next move then I acquired in this move
         if myMove == -1:  # could not get any such move which doesn't let me capture with net profit :'(
@@ -118,19 +119,19 @@ def lookintofuture(i, j):
 
 def safePlay():
     # since there is no attack to do, give priority to corners
-    print "in safe play"
+    #print "in safe play"
     #print "grid is"
     #print grid
     for i in range(0, 5, 4):
         if grid[i][0] == 0 and isSafe(i, 0) == True:
             x = i
             y = 0
-            print "emabrising"
+            #print "emabrising"
             return [x, y]
         elif grid[i][4] == 0 and isSafe(i, 4) == True:
             x = i
             y = 4
-            print "bhfbjwhefbhejf"
+            #print "bhfbjwhefbhejf"
             return [x, y]
 
     if len(my_volatile) > 0:
@@ -181,13 +182,13 @@ def isSafe(a, b):
         global nextMoveGrid
 
         nextMoveGrid = copy.deepcopy(grid)
-        print nextMoveGrid
+        #print nextMoveGrid
         # gets outcome when the orb exploded
         lookintofuture(orbs[0], orbs[1])
-        print  nextMoveGrid
+        #print  nextMoveGrid
 
-        print "hello"
-        print nextMoveGrid[a][b]
+        #print "hello"
+        #print nextMoveGrid[a][b]
         if nextMoveGrid[a][b] / 10 == opponent_id:
             return False
 
@@ -314,7 +315,25 @@ def surrounding(i, j):
     return count
 
 
-def main():
+def main(Igrid,Iplayer_id):
+    global grid,player_id,nextMoveGrid
+
+
+    # need to clear them each time the main is called since the file is imported in app.py i.e it doesn't compile each time, just this function gets
+    # called again and again
+    global moves,my_orbs,opponent_orbs,volatile_orbs,my_volatile,opponent_volatile,empty_spaces,nextVolatileOrbs,nextMoveGrid
+    moves = []
+    my_orbs = []
+    opponent_orbs = []
+    volatile_orbs = []
+    my_volatile = []
+    opponent_volatile = []
+    empty_spaces = []
+    nextVolatileOrbs = []
+    nextMoveGrid=[]
+
+    grid=Igrid
+    player_id=Iplayer_id
     # deducing positions
     for i in range(size):
         for j in range(size):
@@ -331,7 +350,8 @@ def main():
             elif grid[i][j] % 10 == surrounding(i, j) - 1 and grid[i][j] / 10 != player_id:
                 opponent_volatile.append([i, j])
 
-    # fill atleast one corner
+    nextMoveGrid = copy.deepcopy(grid)
+    # fills atleast one corner only when I don't have any volatile orbs (i.e maybe I can win)
     if len(my_volatile) == 0:
         for i in range(0, 5, 4):
             if grid[i][0] == 0:
@@ -349,18 +369,3 @@ def main():
         #print "in non volatile"
         move = bestMove()
         return move
-
-
-
-# taking input
-for i in range(size):
-    temp = raw_input("").split()
-    for j in range(len(temp)):
-        temp[j] = int(temp[j])
-    grid.append(temp)
-
-nextMoveGrid = copy.deepcopy(grid)
-#print grid
-player_id = input("")
-output = main()
-print output[0], output[1]
