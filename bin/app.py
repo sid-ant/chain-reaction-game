@@ -18,9 +18,12 @@ player_id=1
 old=[]
 matchType=0
 client = MongoClient('localhost', 27017)
-db = client.chainreaction
-games = db.games
-
+db = client.chainreaction #create or open chainreaction database
+games = db.games # create or open document (table) games
+NameP1 = ""
+NameP2 = ""
+gameid=0
+gType=""
 
 class home:
     def GET(self):
@@ -44,30 +47,39 @@ class getname:
         players = int(ty.type)
         return render.playername(type=players)
     def POST(self):
-        global matchType
+        global matchType,NameP1,NameP2,gameid,gType
         # connect to database here and store player names
         # take game type input from here and pass it to game
         nameType = web.input()
         matchType = nameType.match
+
         if nameType.player1 is not None:
             p1Name = str(nameType.player1)
-        if nameType.player2 is not None:
-            p2Name = str(nameType.player2)
+        if int(matchType)==1:
+            if nameType.player2 is not None:
+                p2Name = str(nameType.player2)
 
         if int(matchType)==1:
-            row = {'p1':p1Name,'p2':p2Name,'win':0,'gameType':'HvH'}
+            gType='HvH'
+            row = {'p1':p1Name,'p2':p2Name,'win':0,'gameType':gType}
         elif int(matchType)==2:
-            row = {'p1':p1Name,'p2':'Skynet 0.1','win':0,'gameType':'HvC'}
-            
+            gType='HvC'
+            row = {'p1':p1Name,'p2':'Skynet 0.1','win':0,'gameType':gType}
+
         gameid = games.insert_one(row).inserted_id
+
+        results = games.find_one({'_id':gameid})
+        NameP1 = results['p1']
+        NameP2 = results['p2']
+        #NameP1 = NameP1+"";
         # gets called only once per match
-        return render.game(input=grid,player=player_id,winner=0,Mtype=matchType)
+        return render.game(input=grid,player=player_id,winner=0,Mtype=matchType,p1=NameP1,p2=NameP2)
 
 class game:
     def GET(self):
-        # this no longer gets called I guess!
+        # this no longer gets called but too scared to remove it now!
         grid=[[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
-        return render.game(input=grid,player=player_id,winner=0,Mtype=matchType)
+        return render.game(input=grid,player=player_id,winner=0,Mtype=matchType,p1=NameP1,p2=NameP2)
 
     def POST(self):
 
@@ -121,9 +133,10 @@ class game:
         elif old2!=0 and new2==0:
             win=1
 
-        print matchType
-        print player_id
-        return render.game(input=grid,player=player_id,winner=win,Mtype=matchType)
+        if win!=0:
+            games.update({'_id':gameid},{'$set':{"win":win}})
+
+        return render.game(input=grid,player=player_id,winner=win,Mtype=matchType,p1=NameP1,p2=NameP2)
 
 class ai:
     def GET(self):
@@ -170,7 +183,11 @@ class ai:
                 win=2
             elif old2!=0 and new2==0:
                 win=1
-        return render.game(input=grid,player=player_id,winner=win,Mtype=matchType)
+
+            if win!=0:
+                games.update({'_id':gameid},{'$set':{"win":win}})
+
+        return render.game(input=grid,player=player_id,winner=win,Mtype=matchType,p1=NameP1,p2=NameP2)
 
 
 # still doesn't know what this does? duh?

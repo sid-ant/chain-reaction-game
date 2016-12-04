@@ -1,4 +1,4 @@
-$def with (input=None,player=None,winner=None,Mtype=None)
+$def with (input=None,player=None,winner=None,Mtype=None,p1=None,p2=None)
 
 <!DOCTYPE html>
 <html>
@@ -108,20 +108,31 @@ $if winner!=0:
 
 $if input:
   <script>
-    console.log($input);
+    // console.log($input);
     var input=$input;
-    console.log(input);
+    // console.log(input);
   </script>
+
 
 $if player:
   <script>
+  function getPlayerName(player){
+    if(player==1){
+      return String(p1);
+    }
+    else{
+      return String(p2);
+    }
+  }
   var player=$player;
+  var p1 = "$p1";
+  var p2 = "$p2";
   var turn = document.getElementById("clickE");
   if(win!=0){
-    turn.innerHTML="Player "+win+" WON!";
+        turn.innerHTML=""+getPlayerName(win)+" WON!";
   }
   else{
-  turn.innerHTML="Player's "+player+" turn";
+        turn.innerHTML=""+getPlayerName(player)+"'s turn";
   }
   </script>
 
@@ -175,11 +186,11 @@ function surrounding(i,j){
 function getOrbImage(x,y){
     var address="/static/images/orbs/"
     var orbinfo = input[x][y];
-    console.log("orb is "+orbinfo);
+    //console.log("orb is "+orbinfo);
     var numberoforbs = parseInt(orbinfo%10);
     var playerinformation = parseInt(orbinfo/10);
-    console.log("numberoforbs is "+numberoforbs);
-    console.log("player is "+playerinformation);
+    //console.log("numberoforbs is "+numberoforbs);
+    //console.log("player is "+playerinformation);
 
       if(playerinformation==1) {
           if (numberoforbs == surrounding(x,y)-1){
@@ -188,7 +199,7 @@ function getOrbImage(x,y){
           else{
             var image = "src="+address+"b"+numberoforbs+"s.png";
           }
-        console.log(image);
+        //console.log(image);
         return image;
       }
       else if(playerinformation==2){
@@ -198,20 +209,22 @@ function getOrbImage(x,y){
         else {
           var image = "src="+address+"r"+numberoforbs+"s.png";
         }
-        console.log(image);
+        //console.log(image);
         return image;
       }
       else{
         var image = "src="+address+"blank3.png" + " height=59 width=69";
-        console.log(image);
+        //console.log(image);
         return image;
       }
 
 }
 
+
+
 function userMove(x,y){
-      console.log("hey "+typeof(player));
-      console.log(parseInt(input[x][y]/10));
+      //console.log("hey "+typeof(player));
+      //console.log(parseInt(input[x][y]/10));
       if (win!=0){
           window.alert("Player "+win+" WON! Dude");
           // var id = x*10+y;
