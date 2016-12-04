@@ -3,6 +3,7 @@ import logic
 import copy
 import os
 import bot
+from pymongo import MongoClient
 
 urls = (
   '/','game','/home','home','/menu','menu','/name','getname','/ai','ai'
@@ -16,6 +17,9 @@ grid=[[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]]
 player_id=1
 old=[]
 matchType=0
+client = MongoClient('localhost', 27017)
+db = client.chainreaction
+games = db.games
 
 
 class home:
@@ -45,7 +49,18 @@ class getname:
         # take game type input from here and pass it to game
         nameType = web.input()
         matchType = nameType.match
-        # gets called only once
+        if nameType.player1 is not None:
+            p1Name = str(nameType.player1)
+        if nameType.player2 is not None:
+            p2Name = str(nameType.player2)
+
+        if int(matchType)==1:
+            row = {'p1':p1Name,'p2':p2Name,'win':0,'gameType':'HvH'}
+        elif int(matchType)==2:
+            row = {'p1':p1Name,'p2':'Skynet 0.1','win':0,'gameType':'HvC'}
+            
+        gameid = games.insert_one(row).inserted_id
+        # gets called only once per match
         return render.game(input=grid,player=player_id,winner=0,Mtype=matchType)
 
 class game:
