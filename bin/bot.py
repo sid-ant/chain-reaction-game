@@ -14,7 +14,7 @@ opponent_volatile = []
 empty_spaces = []
 nextVolatileOrbs = []
 nextMoveGrid=[]
-
+player_id=0
 
 def bestMove():
     opponentOrbs = 0
@@ -29,9 +29,9 @@ def bestMove():
         nextVolatileOrbs = copy.deepcopy(volatile_orbs)
         global nextMoveGrid
         nextMoveGrid = copy.deepcopy(grid)
-
+        pid=player_id
         # gets outcome when the orb exploded
-        lookintofuture(orbs[0], orbs[1])
+        lookintofuture(orbs[0], orbs[1],pid)
 
         for i in nextMoveGrid:
             for j in range(size):
@@ -55,8 +55,10 @@ def bestMove():
     #print myOutcomes[0][2]
     #print len(opponent_orbs)
     # keep only the outcomes where I am capturing orbs
+    uncertanity = 0
+    print "ncicrnr"
     for blah in range(len(myOutcomes)):
-        uncertanity = 0
+        
         if myOutcomes[uncertanity][2] < len(opponent_orbs) and myOutcomes[uncertanity][1] > len(my_orbs):
             continue
         else:
@@ -79,10 +81,10 @@ def bestMove():
         return myMove
 
 
-def lookintofuture(i, j):
+def lookintofuture(i, j,pid):
     global nextMoveGrid
     global nextVolatileOrbs
-
+    player_id = pid
     sourceNode = [i, j]
     nextMoveGrid[i][j] = 0
     sourceNodeIndex = nextVolatileOrbs.index(sourceNode)
@@ -98,7 +100,7 @@ def lookintofuture(i, j):
         if -1 in directions[k] or 5 in directions[k]:
             continue
         elif directions[k] in nextVolatileOrbs:
-            lookintofuture(directions[k][0], directions[k][1])
+            lookintofuture(directions[k][0], directions[k][1],pid)
         else:
             newX = directions[k][0]
             newY = directions[k][1]
@@ -123,12 +125,12 @@ def safePlay():
     #print "grid is"
     #print grid
     for i in range(0, 5, 4):
-        if grid[i][0] == 0 and isSafe(i, 0) == True:
+        if grid[i][0] == 0 and isSafe(i, 0) is True:
             x = i
             y = 0
             #print "emabrising"
             return [x, y]
-        elif grid[i][4] == 0 and isSafe(i, 4) == True:
+        elif grid[i][4] == 0 and isSafe(i, 4) is True:
             x = i
             y = 4
             #print "bhfbjwhefbhejf"
@@ -170,22 +172,24 @@ def safePlay():
 
 
 def isSafe(a, b):
+
     if player_id == 1:
         opponent_id = 2
     else:
         opponent_id = 1
 
-
+    pid=opponent_id
+    #print "current gird",grid
     for orbs in opponent_volatile:
         global nextVolatileOrbs
         nextVolatileOrbs = copy.deepcopy(volatile_orbs)
         global nextMoveGrid
 
         nextMoveGrid = copy.deepcopy(grid)
-        #print nextMoveGrid
+        print "current grid",nextMoveGrid
         # gets outcome when the orb exploded
-        lookintofuture(orbs[0], orbs[1])
-        #print  nextMoveGrid
+        lookintofuture(orbs[0], orbs[1],pid)
+        print  "next move",nextMoveGrid
 
         #print "hello"
         #print nextMoveGrid[a][b]
@@ -232,7 +236,8 @@ def nextMoveILose(afterMyMove, previousMoveOutComes):
     nextVolatileOrbs = copy.deepcopy(volatile_orbs)
     global nextMoveGrid
     nextMoveGrid = copy.deepcopy(grid)
-    lookintofuture(afterMyMove[0][0], afterMyMove[0][1])
+    pid=player_id
+    lookintofuture(afterMyMove[0][0], afterMyMove[0][1],pid)
 
    #print afterMyMove[0][0],afterMyMove[0][1]
     stateAfterMyMove = copy.deepcopy(nextMoveGrid)
@@ -264,13 +269,13 @@ def nextMoveILose(afterMyMove, previousMoveOutComes):
                 newvolatile_orbs.append([i, j])
 
     #print newopponent_volatile
-
+    pid=player_id
     # opponentFuture so he doesn't kill me in next move
     for orbs in newopponent_volatile:
 
         nextVolatileOrbs = copy.deepcopy(newvolatile_orbs)
         nextMoveGrid = copy.deepcopy(stateAfterMyMove)
-        lookintofuture(orbs[0], orbs[1])
+        lookintofuture(orbs[0], orbs[1],pid)
 
         for i in nextMoveGrid:
             for j in range(size):

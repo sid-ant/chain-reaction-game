@@ -142,12 +142,12 @@ class ai:
     def GET(self):
         global grid
         global player_id
-        print "AI MOVES BITCHES!!!"
+       # print "AI MOVES BITCHES!!!"
         win=0
         validity = web.input(valid=None)
         if int(validity.valid)==1:
-            print "HELL YEAH"
-            print "Player id? is "+str(player_id)
+            #print "HELL YEAH"
+           # print "Player id? is "+str(player_id)
             postion = bot.main(grid,player_id)
             x=postion[0]
             y=postion[1]
